@@ -9,7 +9,7 @@ async function setUpPostHog() {
    await databaseConnect();
 
     const client = new PostHog(
-        'phc_UVOe70kGRpDaHSJ0iC0LCT4sUFONgn6LwXpLF1jC2F4',
+        'posthog_KEY',
         { host: "https://eu.i.posthog.com" }
     );
   
@@ -34,11 +34,16 @@ async function migrateEvents<T extends IEvent<any>>(events: Array<T>, client: Po
 
 async function migrateItentityEvents<T extends IEvent<any>>(events: Array<T>, client: PostHog) {
     for (let event of events) {
-         const user = await User.findOne({ email:event.distinctId });
-         user&&client.identify({distinctId:event.distinctId,properties:user?.toJSON()});
-         await sleep(2000);
-         console.log(`Processed event ${event.distinctId} migrated`);
+         await setUserData<T>(event, client);
     }
 }
 
 setUpPostHog();
+
+async function setUserData<T extends IEvent<any>>(event: T, client: PostHog) {
+    const user = await User.findOne({ email: event.distinctId });
+    user && client.identify({ distinctId: event.distinctId, properties: user?.toJSON() });
+    await sleep(1000);
+    console.log(`Processed event ${event.distinctId} migrated`);
+}
+

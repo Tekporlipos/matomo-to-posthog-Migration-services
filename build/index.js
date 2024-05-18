@@ -22,7 +22,7 @@ function setUpPostHog() {
         yield (0, connect_1.default)();
         const client = new posthog_node_1.PostHog('phc_UVOe70kGRpDaHSJ0iC0LCT4sUFONgn6LwXpLF1jC2F4', { host: "https://eu.i.posthog.com" });
         for (let eventType of events_path_1.eventTypes) {
-            yield (0, parser_1.parser)(eventType, migrateEvents, client);
+            yield (0, parser_1.parser)(eventType, migrateItentityEvents, client);
         }
         yield client.shutdown();
     });
@@ -42,11 +42,16 @@ function migrateEvents(events, client) {
 function migrateItentityEvents(events, client) {
     return __awaiter(this, void 0, void 0, function* () {
         for (let event of events) {
-            const user = yield model_1.default.findOne({ email: event.distinctId });
-            user && client.identify({ distinctId: event.distinctId, properties: user === null || user === void 0 ? void 0 : user.toJSON() });
-            yield sleep(2000);
-            console.log(`Processed event ${event.distinctId} migrated`);
+            yield setUserData(event, client);
         }
     });
 }
 setUpPostHog();
+function setUserData(event, client) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield model_1.default.findOne({ email: event.distinctId });
+        user && client.identify({ distinctId: event.distinctId, properties: user === null || user === void 0 ? void 0 : user.toJSON() });
+        yield sleep(1000);
+        console.log(`Processed event ${event.distinctId} migrated`);
+    });
+}

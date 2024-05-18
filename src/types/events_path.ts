@@ -1,5 +1,5 @@
 const production: string[] = [
-    // 'in/History_Page.csv',
+    'in/History_Page.csv',
     'in/Feedback_Page.csv',
     'in/Subscriptions_Page.csv',
     'in/Ask_Kwame_Page.csv',
@@ -22,4 +22,4 @@ const user: string[] = [
     'in/EsqAI Unique Users - Up To 2021-05-02.csv',
 ];
 
-export const eventTypes: string[] = [...production];
+export const eventTypes: string[] = [...user];

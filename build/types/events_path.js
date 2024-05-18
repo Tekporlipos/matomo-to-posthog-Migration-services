@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eventTypes = void 0;
 const production = [
-    // 'in/History_Page.csv',
+    'in/History_Page.csv',
     'in/Feedback_Page.csv',
     'in/Subscriptions_Page.csv',
     'in/Ask_Kwame_Page.csv',
@@ -20,4 +20,4 @@ const staging = [
 const user = [
     'in/EsqAI Unique Users - Up To 2021-05-02.csv',
 ];
-exports.eventTypes = [...production];
+exports.eventTypes = [...user];
